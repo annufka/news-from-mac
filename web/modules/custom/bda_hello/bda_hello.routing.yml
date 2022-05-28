@@ -1,0 +1,56 @@
+bda_hello.hello:
+  path: '/hello'
+  defaults:
+    _controller: '\Drupal\bda_hello\Controller\BDAHelloController::hello'
+    _title: 'Welcome to My Module in Drupal 9'
+  requirements: 
+    _permission: 'access content'
+
+bda_hello.news:
+  path: '/news'
+  defaults:
+    _controller: '\Drupal\bda_hello\Controller\BDAHelloController::filter_news'
+    _title: 'News'
+  requirements:
+    _permission: 'access content'
+
+bda_hello.last_news:
+  path: '/news/latest'
+  defaults:
+    _controller: '\Drupal\bda_hello\Controller\BDAHelloController::get_last_news'
+    _title: 'Last news'
+  requirements: 
+    _permission: 'view latest news page'
+
+bda_hello.news_category:
+  path: '/news/category/{category_id}'
+  defaults:
+    _controller: '\Drupal\bda_hello\Controller\BDAHelloController::get_news_category'
+    _title: 'News in category'
+  requirements: 
+    _permission: 'access content'
+
+bda_hello.add_news:
+  path: '/add-news'
+  defaults:
+    _form: '\Drupal\bda_hello\Form\BDAAddNewsForm'
+    _title: 'Add news'
+  requirements: 
+    _permission: 'add news'
+
+bda_hello_news_filter.settings:
+  path: '/admin/config/news/filter/settings'
+  defaults:
+    _form: '\Drupal\bda_hello\Form\BDAFilterNewsForm'
+    _title: 'Filter news'
+  requirements:
+    _permission: 'administer site configuration'
+
+bda_hello.twig:
+  path: '/twig'
+  defaults:
+    _controller: '\Drupal\bda_hello\Controller\BDAHelloTwigController::content'
+    _title: 'Example'
+  requirements: 
+    _permission: 'access content'
+

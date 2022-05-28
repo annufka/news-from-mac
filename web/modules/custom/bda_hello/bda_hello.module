@@ -1,0 +1,81 @@
+<?php
+
+    use Drupal\Core\Access\AccessResult;
+    use Drupal\Core\Datetime\DrupalDateTime;
+    use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+
+    function bda_hello_theme($existing, $type, $theme, $path) {
+      return [
+      'bda-hello-template' => [
+        'variables' => ['test_var' => NULL],
+       ],
+    ];
+    }
+
+    /**
+    * Implements hook_form_alter().
+    */
+    function bda_hello_form_alter(&$form, $form_state, $form_id) {
+        if ($form_id == 'user_login_form') {
+            $form['#submit'][] = 'dba_hello_user_login_submit';
+        }
+    }
+
+    // http://web.localhost/user/login
+
+    /**
+     * Additional handler for user_login form submit.
+     */
+    function dba_hello_user_login_submit($form, &$form_state) {
+        $roles = \Drupal::currentUser()->getRoles();
+        if (in_array('moderator', $roles)) {
+            $url = Drupal\core\Url::fromUserInput('/admin/content');
+            $form_state->setRedirectUrl($url);
+        } else {
+            $url = Drupal\core\Url::fromUserInput('/');
+            $form_state->setRedirectUrl($url);
+        }
+    }
+
+    /**
+     * Implements hook_entity_field_access().
+     */
+    function bda_hello_entity_field_access($operation, $field_definition, $account, $items = NULL) {
+        if ($field_definition->getName() == 'field_date_of_publish' && $operation == 'edit' && !$account->hasPermission('add publish date')) {
+            return AccessResult::forbidden();
+        }
+        return AccessResult::allowed();
+    }
+
+    /**
+     * Implements hook_entity_presave().
+     */
+    function bda_hello_entity_presave($entity) {
+        if ($entity->getEntityTypeId() == 'node' && $entity->getType() == 'news') {
+            if (!$entity->isNew() && $entity->get('status')->getValue() != $entity->original->get('status')->getValue()) {
+                $entity->field_date_of_publish->value = date('Y-m-d') . 'T' . date('h:i:s');
+            }
+        }
+    }
+
+    /**
+     * Implements hook_entity_access().
+     */
+    function bda_hello_entity_access($entity, $operation, $account) {
+
+        $entity_date = $entity->field_date_of_publish->date;
+
+        $now = new DrupalDateTime('now');
+        $now->setTimezone(new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE));
+
+        if ($entity->getEntityTypeId() == 'node' && $entity->getType() == 'news') {
+            if ($operation == 'view') {
+                if(!$account->hasPermission('future news')) {
+                    if ($now < $entity_date) {
+                        return AccessResult::forbidden();
+                    }
+                }
+            }
+        }
+        return AccessResult::allowed();
+    }
