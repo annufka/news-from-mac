@@ -1,9 +1,9 @@
 <?php
 /**
  * @file
- * Contains \Drupal\custom_block\Plugin\Block\FormBlock.
+ * Contains \Drupal\bda_hello\Plugin\Block\FormBlock.
  */
-namespace Drupal\custom_block\Plugin\Block;
+namespace Drupal\bda_hello\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 /**
@@ -20,9 +20,7 @@ class FormBlock extends BlockBase {
    * {@inheritdoc}
    */
   public function build() {
-    return array(
-      '#type' => 'markup',
-      '#markup' => 'This custom block content.',
-    );
+    $form = \Drupal::formBuilder()->getForm('Drupal\bda_hello\Form\BDARegisterToEventForm');
+    return $form;
   }
 }

@@ -10,6 +10,7 @@ composer require drush/drush
 * ./vendor/bin/drush config:export - config
 * ./vendor/bin/drush cr - rm cache
 * ./vendor/bin/drush gen theme
+* ./vendor/bin/drush ws - log
 
 1. devel
 2. paragraphs
