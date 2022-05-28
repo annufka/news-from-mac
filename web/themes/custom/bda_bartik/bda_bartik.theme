@@ -13,14 +13,22 @@ function bda_bartik_theme_suggestions_alter(array &$suggestions, array $variable
 //    ksm($variables);
     if ($variables["content"]["#node"] -> getType() == "news") {
 //      ksm($variables);
-//      if ($variables["content"]["#node"]->get("field_category_bookmark")) {
+//      var_dump($variables["content"]["#node"]);
+//      if ($variables["content"]["#node"]->get("field_category_bookmark")->bool) {
         $suggestions[] = 'ds_entity_view__edit';
-//        var_dump($variables["content"]["#node"]->field_news_category->field_category_bookmark->bool);
 //      }
     }
   }
 }
 
+function bda_bartik_preprocess_page_title(&$variables){
+  if ($node = \Drupal::routeMatch()->getParameter('node')) {
+    /** @var Drupal\node\NodeInterface $node */
+    if ($node->bundle() == 'news') {
+      $variables['title'] = 'News: ' . $node->getTitle();
+    }
+  }
+}
 /**
  * Implements hook_preprocess_HOOK() for html.html.twig.
  */
