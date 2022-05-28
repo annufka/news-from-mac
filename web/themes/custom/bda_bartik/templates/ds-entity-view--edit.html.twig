@@ -5,19 +5,28 @@
   {% endif %}
   {{ title_suffix }}
   {% block content %}
+
     <div{{ content_attributes.addClass('content') }}>
-
-        <div class="row">
-          <div class="align-left">
-            {{ content.field_main_picture }}
-          </div>
-          <div class="align-right">
-            {{ content.field_date_of_publish }}
-            {{ content.title }}
-            {{ content.field_news_description }}
-          </div>
+      <div class="ds-2col clearfix">
+        <div class="group-left">
+          {{ content.field_main_picture }}
         </div>
-
+        <div class="group-right">
+          {{ content.field_date_of_publish }}
+          <div class="link-item">
+            <div class="link-title">
+              <div {% set classes = [
+                'field',
+                'field--name-' ~ field_name|clean_class,
+                'field--type-' ~ field_type|clean_class,
+                'field--label-' ~ label_display,
+              ] %}>{{ content.title }}</div>
+            </div>
+          </div>
+          {{ content.field_news_description }}
+        </div>
+      </div>
     </div>
+
   {% endblock %}
 </div>

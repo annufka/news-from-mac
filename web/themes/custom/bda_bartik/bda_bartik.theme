@@ -15,6 +15,9 @@ function bda_bartik_theme_suggestions_alter(array &$suggestions, array $variable
       $taxonomy = $node->get("field_news_category")->entity;
       if ($taxonomy instanceof \Drupal\taxonomy\Entity\Term && $taxonomy->hasField("field_category_bookmark") && !$taxonomy->get("field_category_bookmark")->isEmpty()) {
         $bookmark = $taxonomy->get("field_category_bookmark")->value;
+        if ($bookmark) {
+          $suggestions[] = 'ds_entity_view__edit';
+        }
       }
     }
 
