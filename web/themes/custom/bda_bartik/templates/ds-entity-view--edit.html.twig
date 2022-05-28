@@ -6,7 +6,18 @@
   {{ title_suffix }}
   {% block content %}
     <div{{ content_attributes.addClass('content') }}>
-      Here{{ content }}
+
+        <div class="row">
+          <div class="align-left">
+            {{ content.field_main_picture }}
+          </div>
+          <div class="align-right">
+            {{ content.field_date_of_publish }}
+            {{ content.title }}
+            {{ content.field_news_description }}
+          </div>
+        </div>
+
     </div>
   {% endblock %}
 </div>

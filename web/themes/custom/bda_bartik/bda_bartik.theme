@@ -10,14 +10,25 @@
  */
 function bda_bartik_theme_suggestions_alter(array &$suggestions, array $variables, $hook) {
   if ($hook == 'ds_entity_view') {
-//    ksm($variables);
-    if ($variables["content"]["#node"] -> getType() == "news") {
-//      ksm($variables);
-//      var_dump($variables["content"]["#node"]);
-//      if ($variables["content"]["#node"]->get("field_category_bookmark")->bool) {
-        $suggestions[] = 'ds_entity_view__edit';
-//      }
+    $node = $variables["content"]["#node"];
+    if ($node->hasField("field_news_category") && !$node->get("field_news_category")->isEmpty()) {
+      $taxonomy = $node->get("field_news_category")->entity;
+      if ($taxonomy instanceof \Drupal\taxonomy\Entity\Term && $taxonomy->hasField("field_category_bookmark") && !$taxonomy->get("field_category_bookmark")->isEmpty()) {
+        $bookmark = $taxonomy->get("field_category_bookmark")->value;
+      }
     }
+
+////    ksm($variables);
+//    if ($variables["content"]["#node"] -> getType() == "news") {
+//      $node = $variables["content"]["#node"];
+//      $taxonomy = $node->get("field_news_category");
+//      echo $taxonomy;die;
+////      ksm($variables);
+////      var_dump($variables["content"]["#node"]);
+////      if ($variables["content"]["#node"]->get("field_category_bookmark")->bool) {
+//        $suggestions[] = 'ds_entity_view__edit';
+////      }
+//    }
   }
 }
 
