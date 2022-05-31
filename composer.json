@@ -21,6 +21,7 @@
         "drupal/core-recommended": "^9.3",
         "drupal/devel": "^4.1",
         "drupal/ds": "^3.13",
+        "drupal/examples": "^3.0",
         "drupal/paragraphs": "^1.14",
         "drupal/webform": "^6.1",
         "drush/drush": "^11.0"

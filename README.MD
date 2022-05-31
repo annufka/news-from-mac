@@ -21,5 +21,8 @@ composer require drush/drush
 7. metatag
 8. ds
 9. inline form errors
+10. examples
 
 core.extension - установленные модули и темы
+
+Double shift - поиск по классам

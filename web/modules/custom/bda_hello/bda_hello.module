@@ -63,14 +63,13 @@
      */
     function bda_hello_entity_access($entity, $operation, $account) {
 
-        $entity_date = $entity->field_date_of_publish->date;
-
-        $now = new DrupalDateTime('now');
-        $now->setTimezone(new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE));
-
         if ($entity->getEntityTypeId() == 'node' && $entity->getType() == 'news') {
             if ($operation == 'view') {
                 if(!$account->hasPermission('future news')) {
+                  $entity_date = $entity->field_date_of_publish->date;
+
+                  $now = new DrupalDateTime('now');
+                  $now->setTimezone(new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE));
                     if ($now < $entity_date) {
                         return AccessResult::forbidden();
                     }
