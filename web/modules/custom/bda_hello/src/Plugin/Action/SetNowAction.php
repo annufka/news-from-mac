@@ -2,7 +2,6 @@
 
 namespace Drupal\bda_hello\Plugin\Action;
 
-use Drupal\Core\Action\ActionBase;
 use Drupal\Core\Session\AccountInterface;
 use \Drupal\Core\Action\Plugin\Action\EntityActionBase;
 
