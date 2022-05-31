@@ -1,0 +1,8 @@
+name: 'BDA Action'
+type: module
+description: 'action'
+package: Custom
+version: 1.0
+core_version_requirement: ^9
+dependencies:
+  - drupal:action

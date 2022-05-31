@@ -1,8 +1,8 @@
 id: set_now_action
-label: 'An action that set now time'
+label: 'Update publication date'
 status: true
 langcode: en
-type: node
+#type: node
 plugin: set_now_action
 dependencies:
   module:

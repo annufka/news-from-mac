@@ -1,3 +1,3 @@
 action.configuration.set_now_action:
   type: set_now_action
-  label: 'An action that set now time'
+  label: 'Update publication date'
