@@ -1,0 +1,31 @@
+entity.product_config.collection:
+  path: '/admin/structure/product-config'
+  defaults:
+    _entity_list: 'product_config'
+    _title: 'Product_config configuration'
+  requirements:
+    _permission: 'administer product_config'
+
+entity.product_config.add_form:
+  path: '/admin/structure/product_config/add'
+  defaults:
+    _entity_form: 'product_config.add'
+    _title: 'Add a product_config'
+  requirements:
+    _permission: 'administer product_config'
+
+entity.product_config.edit_form:
+  path: '/admin/structure/product-config/{product_config}'
+  defaults:
+    _entity_form: 'product_config.edit'
+    _title: 'Edit a product_config'
+  requirements:
+    _permission: 'administer product_config'
+
+entity.product_config.delete_form:
+  path: '/admin/structure/product-config/{product_config}/delete'
+  defaults:
+    _entity_form: 'product_config.delete'
+    _title: 'Delete a product_config'
+  requirements:
+    _permission: 'administer product_config'

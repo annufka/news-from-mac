@@ -53,3 +53,5 @@
 # Ignore .env files as they are personal
 /.env
 /.gitattributes
+
+.DS_Store

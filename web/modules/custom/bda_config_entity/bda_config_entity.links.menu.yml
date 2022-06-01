@@ -1,0 +1,5 @@
+entity.product_config.overview:
+  title: Product_configs
+  parent: system.admin_structure
+  description: 'List of product_configs to extend site functionality.'
+  route_name: entity.product_config.collection
