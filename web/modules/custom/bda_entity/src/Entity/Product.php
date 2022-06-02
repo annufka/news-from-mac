@@ -52,6 +52,8 @@ use Drupal\user\EntityOwnerTrait;
  *     "label" = "label",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
+ *     "category" = "category",
+ *     "price" = "price"
  *   },
  *   revision_metadata_keys = {
  *     "revision_user" = "revision_uid",
@@ -193,6 +195,46 @@ class Product extends RevisionableContentEntityBase implements ProductInterface 
       ->setLabel(t('Changed'))
       ->setTranslatable(TRUE)
       ->setDescription(t('The time that the product was last edited.'));
+
+    $fields['category'] = BaseFieldDefinition::create('entity_reference')
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
+      ->setLabel(t('Category'))
+      ->setSetting('target_type', 'taxonomy_term')
+      ->setDisplayOptions('form', [
+        'type' => 'entity_reference_autocomplete',
+        'settings' => [
+          'match_operator' => 'CONTAINS',
+          'size' => 60,
+          'placeholder' => '',
+        ],
+        'weight' => 15,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'category',
+        'type' => 'category_product',
+        'weight' => 15,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+//
+    $fields['price'] = BaseFieldDefinition::create('string')
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
+      ->setLabel(t('Price'))
+      ->setRequired(TRUE)
+      ->setSetting('max_length', 8)
+      ->setDisplayOptions('form', [
+        'type' => 'int',
+        'weight' => -5,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'label' => 'hidden',
+        'type' => 'string',
+        'weight' => -5,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
 
     return $fields;
   }
