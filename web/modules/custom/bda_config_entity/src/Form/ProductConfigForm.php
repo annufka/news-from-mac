@@ -37,17 +37,28 @@ class ProductConfigForm extends EntityForm {
       '#disabled' => !$this->entity->isNew(),
     ];
 
-    $form['status'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Enabled'),
-      '#default_value' => $this->entity->status(),
-    ];
+    $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
+    $ids = $termStorage->getQuery()
+      ->condition('vid', 'category_product')
+      ->execute();
 
-    $form['description'] = [
-      '#type' => 'textarea',
-      '#title' => $this->t('Description'),
-      '#default_value' => $this->entity->get('description'),
-      '#description' => $this->t('Description of the product_config.'),
+    $categories = [];
+    foreach ($termStorage->loadMultiple($ids) as $item) {
+      $categories[$item->id()] = $item->label();
+    }
+
+    $form['category'] = array(
+      '#type' => 'select',
+      '#options' => $categories,
+      '#title' => $this->t('Category: '),
+      '#description' => $this->t('Category of the product_config.'),
+    );
+
+    $form['price'] = [
+      '#type' => 'number',
+      '#title' => $this->t('Price'),
+      '#default_value' => $this->entity->get('price'),
+      '#description' => $this->t('Price of the product_config.'),
     ];
 
     return $form;

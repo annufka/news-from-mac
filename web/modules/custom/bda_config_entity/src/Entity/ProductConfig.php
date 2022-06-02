@@ -37,12 +37,15 @@ use Drupal\bda_config_entity\ProductConfigInterface;
  *   entity_keys = {
  *     "id" = "id",
  *     "label" = "label",
- *     "uuid" = "uuid"
+ *     "uuid" = "uuid",
+ *     "category" = "category",
+ *     "price" = "price"
  *   },
  *   config_export = {
  *     "id",
  *     "label",
- *     "description"
+ *     "category",
+ *     "price"
  *   }
  * )
  */
@@ -62,18 +65,13 @@ class ProductConfig extends ConfigEntityBase implements ProductConfigInterface {
    */
   protected $label;
 
-  /**
-   * The product_config status.
-   *
-   * @var bool
-   */
-  protected $status;
+  protected $category;
 
   /**
-   * The product_config description.
+   * The product_config price.
    *
-   * @var string
+   * @var integer
    */
-  protected $description;
+  protected $price;
 
 }

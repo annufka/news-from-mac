@@ -10,5 +10,7 @@ bda_config_entity.product_config.*:
       label: Label
     uuid:
       type: string
-    description:
+    category:
       type: string
+    price:
+      type: integer
