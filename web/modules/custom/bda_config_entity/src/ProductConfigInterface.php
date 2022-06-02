@@ -9,4 +9,8 @@ use Drupal\Core\Config\Entity\ConfigEntityInterface;
  */
 interface ProductConfigInterface extends ConfigEntityInterface {
 
+  public function getPrice(): string;
+
+  public function getCategory(): string;
+
 }

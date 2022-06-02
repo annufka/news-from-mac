@@ -74,4 +74,14 @@ class ProductConfig extends ConfigEntityBase implements ProductConfigInterface {
    */
   protected $price;
 
+  public function getCategory(): string {
+    $id_category = $this->category;
+    $category = \Drupal\taxonomy\Entity\Term::load($id_category)->get('name')->value;
+    return $category;
+  }
+
+  public function getPrice(): string {
+    return $this->price;
+  }
+
 }

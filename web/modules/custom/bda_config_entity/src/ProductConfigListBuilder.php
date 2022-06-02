@@ -16,7 +16,8 @@ class ProductConfigListBuilder extends ConfigEntityListBuilder {
   public function buildHeader() {
     $header['label'] = $this->t('Label');
     $header['id'] = $this->t('Machine name');
-    $header['status'] = $this->t('Status');
+    $header['category'] = $this->t('Category');
+    $header['price'] = $this->t('Price');
     return $header + parent::buildHeader();
   }
 
@@ -27,7 +28,8 @@ class ProductConfigListBuilder extends ConfigEntityListBuilder {
     /** @var \Drupal\bda_config_entity\ProductConfigInterface $entity */
     $row['label'] = $entity->label();
     $row['id'] = $entity->id();
-    $row['status'] = $entity->status() ? $this->t('Enabled') : $this->t('Disabled');
+    $row['category'] = $entity->getCategory();
+    $row['price'] = $entity->getPrice();
     return $row + parent::buildRow($entity);
   }
 
