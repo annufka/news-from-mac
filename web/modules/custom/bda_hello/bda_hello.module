@@ -78,3 +78,27 @@
         }
         return AccessResult::allowed();
     }
+/**
+ * Implements hook_cron().
+ */
+function bda_hello_cron() {
+
+    $now = new DrupalDateTime('now');
+    $now->setTimezone(new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE));
+    $now = $now->getTimestamp();
+    $nodeStorage = Drupal::entityTypeManager()->getStorage('node');
+    $nodeIds = $nodeStorage->getQuery()
+      ->condition('type', 'news')
+      ->condition('status', 1)
+      ->condition('field_archive', 0)
+      ->execute();
+    $nodes = $nodeStorage->loadMultiple($nodeIds);
+    foreach ($nodes as $node) {
+      $published = $node->get('field_date_of_published')->date->getTimestamp();
+      $diff = $now - $published;
+      if ($diff > 60 * 60 * 24 * 30) {
+        $node->set('field_archive', 1);
+        $node->save();
+      }
+    }
+}

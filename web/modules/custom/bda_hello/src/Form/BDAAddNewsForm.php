@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Drupal\bda_hello\Form;
 
@@ -26,18 +26,23 @@ class BDAAddNewsForm extends FormBase {
 
         $termStorage = \Drupal::entityTypeManager()->getStorage('taxonomy_term');
         $ids = $termStorage->getQuery()
-            ->condition('vid', 'Category_of_news')
+            ->condition('vid', 'category')
             ->execute();
-      
+
         $categories = [];
         foreach ($termStorage->loadMultiple($ids) as $item) {
             $categories[$item->id()] = $item->label();
         }
-          
+
         $form['news_category'] = array(
             '#type' => 'select',
             '#options' => $categories,
             '#title' => $this->t('Category: '),
+        );
+
+        $form['date_of_publish'] = array(
+          '#type' => 'datetime',
+          '#title' => $this->t('Date of publish: '),
         );
 
         $form['submit'] = array(
@@ -49,28 +54,29 @@ class BDAAddNewsForm extends FormBase {
 
     public function validateForm(array &$form, FormStateInterface $form_state) {
         parent::validateForm($form, $form_state);
-    
+
         $title = $form_state->getValue('news_title');
         $text = $form_state->getValue('news_text');
-    
+
         if (strlen($title) < 10) {
           $form_state->setErrorByName('news_title', $this->t('The title must be at least 10 characters long.'));
         }
-    
+
         if (empty($text)){
           $form_state->setErrorByName('news_text', $this->t('You must write description of your news.'));
         }
-    
+
       }
 
     public function submitForm(array &$form, FormStateInterface $form_state) {
 
-        $news = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => 'news', 
-        'title' => $form_state->getValue('news_title'), 
-        'field_news_description' => $form_state->getValue('news_text'), 
+        $news = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => 'news',
+        'title' => $form_state->getValue('news_title'),
+        'field_news_description' => $form_state->getValue('news_text'),
         'uid' => \Drupal::currentUser()->id(),
-        'status' => 0, 
-        'field_news_category' => $form_state->getValue('news_category'), 
+        'status' => 0,
+        'field_news_category' => $form_state->getValue('news_category'),
+        'field_date_of_publish' => $form_state->getValue('date_of_publish'),
         ]);
         $news->save();
 
@@ -79,5 +85,5 @@ class BDAAddNewsForm extends FormBase {
 
         $form_state->setRedirect('<front>');
     }
-    
+
 }
