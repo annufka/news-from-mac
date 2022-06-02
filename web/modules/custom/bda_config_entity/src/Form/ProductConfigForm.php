@@ -50,6 +50,7 @@ class ProductConfigForm extends EntityForm {
     $form['category'] = array(
       '#type' => 'select',
       '#options' => $categories,
+//      '#options' => node_type_get_names(), это если мине понадобятся именно ноды типо статья и прочее
       '#title' => $this->t('Category: '),
       '#description' => $this->t('Category of the product_config.'),
     );
