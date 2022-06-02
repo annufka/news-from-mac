@@ -1,7 +1,3 @@
-entity.product.settings:
-  title: 'Settings'
-  route_name: entity.product.settings
-  base_route: entity.product.settings
 entity.product.view:
   title: 'View'
   route_name: entity.product.canonical
@@ -20,3 +16,11 @@ entity.product.collection:
   route_name: entity.product.collection
   base_route: system.admin_content
   weight: 10
+entity.product_type.edit_form:
+  title: 'Edit'
+  route_name: entity.product_type.edit_form
+  base_route: entity.product_type.edit_form
+entity.product_type.collection:
+  title: 'List'
+  route_name: entity.product_type.collection
+  base_route: entity.product_type.collection

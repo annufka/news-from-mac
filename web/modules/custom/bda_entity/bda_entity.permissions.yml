@@ -1,3 +1,12 @@
-administer product:
-  title: 'Administer product settings'
+administer product types:
+  title: 'Administer product types'
+  description: 'Maintain the types of product entity.'
   restrict access: true
+delete product:
+  title: Delete product
+create product:
+  title: Create product
+view product:
+  title: View product
+edit product:
+  title: Edit product

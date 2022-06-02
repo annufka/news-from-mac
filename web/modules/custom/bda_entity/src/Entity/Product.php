@@ -2,10 +2,10 @@
 
 namespace Drupal\bda_entity\Entity;
 
-use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Entity\EntityChangedTrait;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\RevisionableContentEntityBase;
 use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\bda_entity\ProductInterface;
 use Drupal\user\EntityOwnerTrait;
@@ -23,9 +23,11 @@ use Drupal\user\EntityOwnerTrait;
  *     singular = "@count products",
  *     plural = "@count products",
  *   ),
+ *   bundle_label = @Translation("Product type"),
  *   handlers = {
  *     "list_builder" = "Drupal\bda_entity\ProductListBuilder",
  *     "views_data" = "Drupal\views\EntityViewsData",
+ *     "access" = "Drupal\bda_entity\ProductAccessControlHandler",
  *     "form" = {
  *       "add" = "Drupal\bda_entity\Form\ProductForm",
  *       "edit" = "Drupal\bda_entity\Form\ProductForm",
@@ -36,26 +38,39 @@ use Drupal\user\EntityOwnerTrait;
  *     }
  *   },
  *   base_table = "product",
- *   admin_permission = "administer product",
+ *   data_table = "product_field_data",
+ *   revision_table = "product_revision",
+ *   revision_data_table = "product_field_revision",
+ *   show_revision_ui = TRUE,
+ *   translatable = TRUE,
+ *   admin_permission = "administer product types",
  *   entity_keys = {
  *     "id" = "id",
+ *     "revision" = "revision_id",
+ *     "langcode" = "langcode",
+ *     "bundle" = "bundle",
  *     "label" = "label",
  *     "uuid" = "uuid",
  *     "owner" = "uid",
- *     "price" = "price",
- *     "category" = "category"
+ *   },
+ *   revision_metadata_keys = {
+ *     "revision_user" = "revision_uid",
+ *     "revision_created" = "revision_timestamp",
+ *     "revision_log_message" = "revision_log",
  *   },
  *   links = {
  *     "collection" = "/admin/content/product",
- *     "add-form" = "/product/add",
+ *     "add-form" = "/product/add/{product_type}",
+ *     "add-page" = "/product/add",
  *     "canonical" = "/product/{product}",
  *     "edit-form" = "/product/{product}/edit",
  *     "delete-form" = "/product/{product}/delete",
  *   },
- *   field_ui_base_route = "entity.product.settings",
+ *   bundle_entity_type = "product_type",
+ *   field_ui_base_route = "entity.product_type.edit_form",
  * )
  */
-class Product extends ContentEntityBase implements ProductInterface {
+class Product extends RevisionableContentEntityBase implements ProductInterface {
 
   use EntityChangedTrait;
   use EntityOwnerTrait;
@@ -78,8 +93,10 @@ class Product extends ContentEntityBase implements ProductInterface {
 
     $fields = parent::baseFieldDefinitions($entity_type);
 
-    $fields['name'] = BaseFieldDefinition::create('string')
-      ->setLabel(t('Name'))
+    $fields['label'] = BaseFieldDefinition::create('string')
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
+      ->setLabel(t('Label'))
       ->setRequired(TRUE)
       ->setSetting('max_length', 255)
       ->setDisplayOptions('form', [
@@ -94,49 +111,8 @@ class Product extends ContentEntityBase implements ProductInterface {
       ])
       ->setDisplayConfigurable('view', TRUE);
 
-    $fields['price'] = BaseFieldDefinition::create('float')
-      ->setLabel(t('Price'))
-      ->setRequired(TRUE)
-      ->setSetting('default_value', 0.0)
-      ->setDisplayOptions('form', [
-        'type' => 'float',
-        'weight' => -5,
-      ])
-      ->setDisplayOptions('view', [
-        'label' => 'hidden',
-        'type' => 'float',
-        'weight' => -5,
-      ])
-      ->setDisplayConfigurable('view', TRUE);
-
-    $fields['category'] = BaseFieldDefinition::create('entity_reference')
-      ->setLabel(t('Category'))
-      ->setSetting('target_type', 'node')
-      ->setSetting('handler', 'default:node')
-      ->setSetting('handler_settings', [
-        'target_bundles' => ['category_product' => 'category_product'],
-        'auto_create' => TRUE,
-      ])
-//      ->setRequired(TRUE)
-      ->setTranslatable(FALSE)
-      ->setDisplayOptions('view', [
-        'label' => 'visible',
-        'type' => 'string',
-        'weight' => 2,
-      ])
-      ->setDisplayOptions('form', [
-        'type' => 'entity_reference_autocomplete',
-        'weight' => 2,
-        'settings' => [
-          'match_operator' => 'CONTAINS',
-          'size' => '60',
-          'placeholder' => 'Enter here category',
-        ],
-      ])
-      ->setDisplayConfigurable('view', TRUE)
-      ->setDisplayConfigurable('form', TRUE);
-
     $fields['status'] = BaseFieldDefinition::create('boolean')
+      ->setRevisionable(TRUE)
       ->setLabel(t('Status'))
       ->setDefaultValue(TRUE)
       ->setSetting('on_label', 'Enabled')
@@ -159,6 +135,8 @@ class Product extends ContentEntityBase implements ProductInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['description'] = BaseFieldDefinition::create('text_long')
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setLabel(t('Description'))
       ->setDisplayOptions('form', [
         'type' => 'text_textarea',
@@ -173,6 +151,8 @@ class Product extends ContentEntityBase implements ProductInterface {
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['uid'] = BaseFieldDefinition::create('entity_reference')
+      ->setRevisionable(TRUE)
+      ->setTranslatable(TRUE)
       ->setLabel(t('Author'))
       ->setSetting('target_type', 'user')
       ->setDefaultValueCallback(static::class . '::getDefaultEntityOwner')
@@ -195,6 +175,7 @@ class Product extends ContentEntityBase implements ProductInterface {
 
     $fields['created'] = BaseFieldDefinition::create('created')
       ->setLabel(t('Authored on'))
+      ->setTranslatable(TRUE)
       ->setDescription(t('The time that the product was created.'))
       ->setDisplayOptions('view', [
         'label' => 'above',
@@ -210,6 +191,7 @@ class Product extends ContentEntityBase implements ProductInterface {
 
     $fields['changed'] = BaseFieldDefinition::create('changed')
       ->setLabel(t('Changed'))
+      ->setTranslatable(TRUE)
       ->setDescription(t('The time that the product was last edited.'));
 
     return $fields;

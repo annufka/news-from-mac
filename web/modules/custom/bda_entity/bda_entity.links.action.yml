@@ -1,5 +1,11 @@
-product.add_form:
+product.type_add:
+  title: 'Add product type'
+  route_name: entity.product_type.add_form
+  appears_on:
+    - entity.product_type.collection
+
+product.add_page:
   title: 'Add product'
-  route_name: entity.product.add_form
+  route_name: entity.product.add_page
   appears_on:
     - entity.product.collection

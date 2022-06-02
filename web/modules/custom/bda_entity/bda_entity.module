@@ -81,4 +81,12 @@ function bda_entity_user_predelete(UserInterface $account) {
     ->execute();
   $products = $storage->loadMultiple($product_ids);
   $storage->delete($products);
+  // Delete old revisions.
+  $product_ids = $storage->getQuery()
+    ->allRevisions()
+    ->condition('uid', $account->id())
+    ->execute();
+  foreach (array_keys($product_ids) as $revision_id) {
+    $storage->deleteRevision($revision_id);
+  }
 }

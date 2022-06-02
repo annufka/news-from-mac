@@ -20,7 +20,7 @@ class ProductForm extends ContentEntityForm {
 
     $message_arguments = ['%label' => $entity->toLink()->toString()];
     $logger_arguments = [
-      '%label' => $entity->name(),
+      '%label' => $entity->label(),
       'link' => $entity->toLink($this->t('View'))->toString(),
     ];
 
