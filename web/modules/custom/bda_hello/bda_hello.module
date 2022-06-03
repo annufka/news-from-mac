@@ -113,7 +113,7 @@ function bda_hello_mail($key, &$message, $params) {
   );
 
    switch ($key) {
-     case 'create_node':
+     case 'create_news':
        $message['from'] = \Drupal::config('system.site')->get('mail');
        $message['subject'] = t('Node created: @title', array('@title' => $params['node_title']), $options);
        $message['body'][] = $params['message'];
@@ -146,4 +146,11 @@ function bda_hello_entity_insert(\Drupal\Core\Entity\EntityInterface $entity){
      \Drupal::messenger()->addMessage(t('Your message has been sent.'));
    }
 
+}
+
+/**
+ * Implements hook_update_N().
+ */
+function bda_hello_update_9100(&$sandbox) {
+//  db_change_field('mytable', 'field1', 'field2', array());
 }

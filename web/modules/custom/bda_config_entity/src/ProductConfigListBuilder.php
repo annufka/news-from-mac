@@ -18,6 +18,7 @@ class ProductConfigListBuilder extends ConfigEntityListBuilder {
     $header['id'] = $this->t('Machine name');
     $header['category'] = $this->t('Category');
     $header['price'] = $this->t('Price');
+    $header['some_bool'] = $this->t('Bool');
     return $header + parent::buildHeader();
   }
 
@@ -30,6 +31,7 @@ class ProductConfigListBuilder extends ConfigEntityListBuilder {
     $row['id'] = $entity->id();
     $row['category'] = $entity->getCategory();
     $row['price'] = $entity->getPrice();
+    $row['some_bool'] = $entity->getBool();
     return $row + parent::buildRow($entity);
   }
 

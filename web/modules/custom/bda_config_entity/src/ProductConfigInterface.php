@@ -13,4 +13,6 @@ interface ProductConfigInterface extends ConfigEntityInterface {
 
   public function getCategory(): string;
 
+  public function getBool(): bool;
+
 }

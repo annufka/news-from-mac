@@ -39,7 +39,8 @@ use Drupal\bda_config_entity\ProductConfigInterface;
  *     "label" = "label",
  *     "uuid" = "uuid",
  *     "category" = "category",
- *     "price" = "price"
+ *     "price" = "price",
+ *     "some_bool" = "some_bool"
  *   },
  *   config_export = {
  *     "id",
@@ -74,6 +75,8 @@ class ProductConfig extends ConfigEntityBase implements ProductConfigInterface {
    */
   protected $price;
 
+  protected $some_bool;
+
   public function getCategory(): string {
     $id_category = $this->category;
     $category = \Drupal\taxonomy\Entity\Term::load($id_category)->get('name')->value;
@@ -82,6 +85,13 @@ class ProductConfig extends ConfigEntityBase implements ProductConfigInterface {
 
   public function getPrice(): string {
     return $this->price;
+  }
+
+  public function getBool(): bool {
+    if ($this->some_bool = NULL || $this->some_bool = "") {
+      return false;
+    }
+    return $this->some_bool;
   }
 
 }

@@ -45,4 +45,6 @@ RUN chmod -R ug+w /var/www/
 
 USER www-data
 
+#RUN echo 'sendmail_path = "/usr/local/bin/mhsendmail --smtp-addr=mailhog:1025' >> /usr/local/etc/php/conf.d/custom.ini
+
 EXPOSE 80

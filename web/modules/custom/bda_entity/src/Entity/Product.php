@@ -53,7 +53,8 @@ use Drupal\user\EntityOwnerTrait;
  *     "uuid" = "uuid",
  *     "owner" = "uid",
  *     "category" = "category",
- *     "price" = "price"
+ *     "price" = "price",
+ *     "new_bool" = "new_bool"
  *   },
  *   revision_metadata_keys = {
  *     "revision_user" = "revision_uid",
@@ -233,6 +234,29 @@ class Product extends RevisionableContentEntityBase implements ProductInterface 
         'label' => 'hidden',
         'type' => 'string',
         'weight' => -5,
+      ])
+      ->setDisplayConfigurable('view', TRUE);
+
+    $fields['new_bool'] = BaseFieldDefinition::create('boolean')
+      ->setRevisionable(TRUE)
+      ->setLabel(t('New_bool'))
+      ->setDefaultValue(FALSE)
+      ->setSetting('on_label', 'True')
+      ->setDisplayOptions('form', [
+        'type' => 'boolean_checkbox',
+        'settings' => [
+          'display_label' => FALSE,
+        ],
+        'weight' => 0,
+      ])
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('view', [
+        'type' => 'boolean',
+        'label' => 'above',
+        'weight' => 0,
+        'settings' => [
+          'format' => 'enabled-disabled',
+        ],
       ])
       ->setDisplayConfigurable('view', TRUE);
 

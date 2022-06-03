@@ -46,5 +46,12 @@ services:
     restart: always
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
+  mailhog:
+    image: mailhog/mailhog
+    labels:
+      - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
+      - "traefik.http.routers.mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
+
 volumes:
   my-data:

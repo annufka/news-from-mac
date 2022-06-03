@@ -14,3 +14,5 @@ bda_config_entity.product_config.*:
       type: string
     price:
       type: integer
+    some_bool:
+      type: boolean
