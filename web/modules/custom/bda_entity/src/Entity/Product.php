@@ -238,10 +238,8 @@ class Product extends RevisionableContentEntityBase implements ProductInterface 
       ->setDisplayConfigurable('view', TRUE);
 
     $fields['new_bool'] = BaseFieldDefinition::create('boolean')
-      ->setRevisionable(TRUE)
       ->setLabel(t('New_bool'))
       ->setDefaultValue(FALSE)
-      ->setSetting('on_label', 'True')
       ->setDisplayOptions('form', [
         'type' => 'boolean_checkbox',
         'settings' => [
