@@ -23,6 +23,8 @@
         "drupal/ds": "^3.13",
         "drupal/examples": "^3.0",
         "drupal/paragraphs": "^1.14",
+        "drupal/reroute_email": "^2.1",
+        "drupal/smtp": "^1.0",
         "drupal/webform": "^6.1",
         "drush/drush": "^11.0"
     },

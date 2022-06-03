@@ -3,7 +3,7 @@ bda_hello.hello:
   defaults:
     _controller: '\Drupal\bda_hello\Controller\BDAHelloController::hello'
     _title: 'Welcome to My Module in Drupal 9'
-  requirements: 
+  requirements:
     _permission: 'access content'
 
 bda_hello.news:
@@ -19,7 +19,7 @@ bda_hello.last_news:
   defaults:
     _controller: '\Drupal\bda_hello\Controller\BDAHelloController::get_last_news'
     _title: 'Last news'
-  requirements: 
+  requirements:
     _permission: 'view latest news page'
 
 bda_hello.news_category:
@@ -27,7 +27,7 @@ bda_hello.news_category:
   defaults:
     _controller: '\Drupal\bda_hello\Controller\BDAHelloController::get_news_category'
     _title: 'News in category'
-  requirements: 
+  requirements:
     _permission: 'access content'
 
 bda_hello.add_news:
@@ -35,7 +35,7 @@ bda_hello.add_news:
   defaults:
     _form: '\Drupal\bda_hello\Form\BDAAddNewsForm'
     _title: 'Add news'
-  requirements: 
+  requirements:
     _permission: 'add news'
 
 bda_hello_news_filter.settings:
@@ -51,6 +51,14 @@ bda_hello.twig:
   defaults:
     _controller: '\Drupal\bda_hello\Controller\BDAHelloTwigController::content'
     _title: 'Example'
-  requirements: 
+  requirements:
+    _permission: 'access content'
+
+bda_hello.table_of_news:
+  path: '/all-news'
+  defaults:
+    _form: '\Drupal\bda_hello\Form\BDAHelloNewsTableForm'
+    _title: 'News'
+  requirements:
     _permission: 'access content'
 
