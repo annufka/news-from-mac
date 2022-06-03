@@ -164,3 +164,20 @@ function bda_hello_update_9100(&$sandbox) {
     }
   }
 }
+
+/**
+ * Implements hook_post_update_NAME().
+ */
+function bda_hello_post_update_9100(&$sandbox) {
+  $productStorage = \Drupal::entityTypeManager()->getStorage('product');
+  $productIds = $productStorage->getQuery()
+    ->execute();
+
+  $products = $productStorage->loadMultiple($productIds);
+  foreach ($products as $product) {
+    if ($product->hasField("new_bool")) {
+      $product->get('new_bool')->value=FALSE;
+      $product->save();
+    }
+  }
+}
