@@ -150,8 +150,7 @@ function bda_hello_cron() {
 /**
  * Implements hook_update_N().
  */
-//function bda_hello_update_9100(&$sandbox) {
-function bda_hello_entity_insert(\Drupal\Core\Entity\EntityInterface $entity){
+function bda_hello_update_9100(&$sandbox) {
 
   $productStorage = \Drupal::entityTypeManager()->getStorage('product');
   $productIds = $productStorage->getQuery()
@@ -160,7 +159,7 @@ function bda_hello_entity_insert(\Drupal\Core\Entity\EntityInterface $entity){
   $products = $productStorage->loadMultiple($productIds);
   foreach ($products as $product) {
     if ($product->hasField("new_bool")) {
-      $product->get('new_bool')->value=1;
+      $product->get('new_bool')->value=TRUE;
       $product->save();
     }
   }
