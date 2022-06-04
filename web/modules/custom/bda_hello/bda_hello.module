@@ -3,6 +3,7 @@
     use Drupal\Core\Access\AccessResult;
     use Drupal\Core\Datetime\DrupalDateTime;
     use Drupal\datetime\Plugin\Field\FieldType\DateTimeItemInterface;
+    use Drupal\node\Entity\NodeType;
 
     function bda_hello_theme($existing, $type, $theme, $path) {
       return [
@@ -168,7 +169,7 @@ function bda_hello_update_9100(&$sandbox) {
 /**
  * Implements hook_post_update_NAME().
  */
-function bda_hello_post_update_9100(&$sandbox) {
+function bda_hello_post_update_bda_hello(&$sandbox) {
   $productStorage = \Drupal::entityTypeManager()->getStorage('product');
   $productIds = $productStorage->getQuery()
     ->execute();
@@ -179,5 +180,49 @@ function bda_hello_post_update_9100(&$sandbox) {
       $product->get('new_bool')->value=FALSE;
       $product->save();
     }
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function bda_hello_entity_extra_field_info() {
+  $extra = [];
+
+  foreach (NodeType::loadMultiple() as $bundle) {
+    $extra['node'][$bundle->id()]['display']['created_time_sec'] = [
+      'label' => t('Created, sec.'),
+      'description' => t('Calculate created time'),
+      'weight' => 100,
+      'visible' => TRUE,
+    ];
+  }
+
+  return $extra;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ */
+function bda_hello_node_view(array &$build, \Drupal\Core\Entity\EntityInterface $entity, \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display, $view_mode) {
+  if ($display->getComponent('created_time_sec')) {
+
+    $renderer = \Drupal::service('renderer');
+
+    $config = \Drupal::config('system.site');
+
+    $now = new DrupalDateTime('now');
+    $now->setTimezone(new \DateTimeZone(DateTimeItemInterface::STORAGE_TIMEZONE));
+
+    $date_create = date('Y-m-d H:i:s', $entity->get("created")->value);
+
+    $diff = strtotime($now) - strtotime($date_create);
+
+    $build['created_time_sec'] = [
+      '#type' => 'markup',
+      '#markup' => 'Time ' . $diff . '',
+    ];
+
+    $renderer->addCacheableDependency($build, $config);
   }
 }
