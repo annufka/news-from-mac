@@ -6,9 +6,12 @@ use Drupal\Core\Cache\CacheableMetadata;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Psr\Log\LoggerInterface;
+use Drupal\Core\Entity\EntityManagerInterface;
 use Drupal\Core\Session\AccountProxyInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Represents NewsListResource records as resources.
@@ -23,19 +26,6 @@ use Drupal\Core\Session\AccountProxyInterface;
  */
 
 class NewsListResource extends ResourceBase {
-
-//  protected $loggedUser;
-//
-//  public static function create(ContainerInterface $container, array $config, $module_id, $module_definition) {
-//    return new static(
-//      $config,
-//      $module_id,
-//      $module_definition,
-//      $container->getParameter('serializer.formats'),
-//      $container->get('logger.factory')->get('sample_rest_resource'),
-//      $container->get('current_user')
-//    );
-//  }
 
   public function get(Request $request) {
     $storage = \Drupal::entityTypeManager()->getStorage('node');
@@ -61,25 +51,23 @@ class NewsListResource extends ResourceBase {
     return $response;
   }
 
-  public function post($data) {
+  public function post(Request $request, $data) {
 
     $node_type = 'news';
     if (!$this->currentUser->hasPermission('access content')) {
       throw new AccessDeniedHttpException();
     }
 
-    $node = Node::create(
-      array(
-        'type' => $node_type,
-        'title' => "test",
-        'field_news_description' => [
-          'value' => "test",
-          'format' => 'full_html',
-        ],
-      )
-    );
-    $node->save();
-    return new ResourceResponse($node);
+    $news = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $node_type,
+      'title' => 'news_title',
+      'field_news_description' => 'news_text',
+      'uid' => \Drupal::currentUser()->id(),
+      'status' => 0
+    ]);
+    $news->save();
+
+    $response = new ResourceResponse($data);
+    return $response;
   }
 
 }

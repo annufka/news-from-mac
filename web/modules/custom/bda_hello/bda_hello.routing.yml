@@ -67,15 +67,20 @@ bda_hello.table_of_news:
 #  defaults: { _controller: '\Drupal\bda_hello\Plugin\rest\resource\NewsListResource::get' }
 #  methods:  [GET]
 #  requirements:
+#    _permission: 'access content'
 #    _access: 'TRUE'
+#    _format: json
 #  options:
-#    _auth: [ 'basic_auth' ]
+#    _auth: [ 'basic_auth', 'cookie' ]
 #
-#test_api.getallitem:
-#  path: '/api/news'
-#  defaults: { _controller: '\Drupal\bda_hello\Plugin\rest\resource\NewsListResource::post' }
-#  methods:  [POST]
-#  requirements:
-#    _access: 'TRUE'
-#  options:
-#    _auth: ['basic_auth']
+bda_hello.post:
+  path: '/api/news'
+  defaults: { _controller: '\Drupal\bda_hello\Plugin\rest\resource\NewsListResource::post' }
+  methods:  [POST]
+  requirements:
+    _permission: 'access content'
+    _access: 'TRUE'
+    _format: json
+  options:
+    _auth: [ 'basic_auth', 'cookie' ]
+
