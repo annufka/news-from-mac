@@ -8,6 +8,7 @@
 use Drupal\Core\Render\Element;
 use Drupal\bda_entity\Entity\Product;
 use Drupal\user\UserInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 
 /**
  * Implements hook_theme().

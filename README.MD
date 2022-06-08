@@ -13,6 +13,8 @@ composer require drush/drush
 * ./vendor/bin/drush gen config-entity
 * ./vendor/bin/drush gen content-entity
 * ./vendor/bin/drush ws - log
+* ./vendor/bin/drush updatedb
+* ./vendor/bin/drush sqlq ''
 
 1. devel
 2. paragraphs

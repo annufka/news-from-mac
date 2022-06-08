@@ -149,41 +149,6 @@ function bda_hello_entity_insert(\Drupal\Core\Entity\EntityInterface $entity){
 }
 
 /**
- * Implements hook_update_N().
- */
-function bda_hello_update_9100(&$sandbox) {
-
-  $productStorage = \Drupal::entityTypeManager()->getStorage('product');
-  $productIds = $productStorage->getQuery()
-    ->execute();
-
-  $products = $productStorage->loadMultiple($productIds);
-  foreach ($products as $product) {
-    if ($product->hasField("new_bool")) {
-      $product->get('new_bool')->value=TRUE;
-      $product->save();
-    }
-  }
-}
-
-/**
- * Implements hook_post_update_NAME().
- */
-function bda_hello_post_update_bda_hello(&$sandbox) {
-  $productStorage = \Drupal::entityTypeManager()->getStorage('product');
-  $productIds = $productStorage->getQuery()
-    ->execute();
-
-  $products = $productStorage->loadMultiple($productIds);
-  foreach ($products as $product) {
-    if ($product->hasField("new_bool")) {
-      $product->get('new_bool')->value=FALSE;
-      $product->save();
-    }
-  }
-}
-
-/**
  * Implements hook_entity_extra_field_info().
  */
 function bda_hello_entity_extra_field_info() {
