@@ -53,5 +53,16 @@ services:
       - "traefik.http.services.mailhog.loadbalancer.server.port=8025"
       - "traefik.http.routers.mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
 
+  node:
+    image: node:slim
+    user: "node"
+    environment:
+      - NODE_ENV=development
+      - SHELL=bash
+    volumes:
+      - .:/home/node/app
+    working_dir: /home/node/app/web/themes/custom/bda_bartik
+    command: sh -c "npm ci && npm run build"
+
 volumes:
   my-data:

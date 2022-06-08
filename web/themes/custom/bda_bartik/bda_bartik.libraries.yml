@@ -1,1 +1,10 @@
 # Main theme library.
+global-libraries:
+  js:
+    dist/assets/global.js: { minified: true }
+  dependencies:
+    - bda_bartik/react
+react:
+  js:
+    dist/assets/react.js: { minified: true }
+    dist/assets/react-dom.js: { minified: true }
