@@ -15,18 +15,21 @@
         }
     ],
     "require": {
-        "composer/installers": "^1.9",
+        "composer/installers": "^2.1",
         "drupal/core-composer-scaffold": "^9.3",
         "drupal/core-project-message": "^9.3",
         "drupal/core-recommended": "^9.3",
         "drupal/devel": "^4.1",
         "drupal/ds": "^3.13",
         "drupal/examples": "^3.0",
+        "drupal/jsonapi_extras": "^3.20",
         "drupal/paragraphs": "^1.14",
         "drupal/reroute_email": "^2.1",
+        "drupal/restui": "^1.20",
         "drupal/smtp": "^1.0",
         "drupal/webform": "^6.1",
-        "drush/drush": "^11.0"
+        "drush/drush": "^11.0",
+        "mnsami/composer-custom-directory-installer": "^2.0"
     },
     "conflict": {
         "drupal/drupal": "*"
@@ -38,7 +41,8 @@
         "allow-plugins": {
             "composer/installers": true,
             "drupal/core-composer-scaffold": true,
-            "drupal/core-project-message": true
+            "drupal/core-project-message": true,
+            "mnsami/composer-custom-directory-installer": true
         }
     },
     "extra": {
@@ -52,7 +56,8 @@
                 "type:drupal-core"
             ],
             "web/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "swagger-api/swagger-ui"
             ],
             "web/modules/contrib/{$name}": [
                 "type:drupal-module"

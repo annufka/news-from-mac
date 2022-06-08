@@ -15,6 +15,7 @@ composer require drush/drush
 * ./vendor/bin/drush ws - log
 * ./vendor/bin/drush updatedb
 * ./vendor/bin/drush sqlq ''
+* ./vendor/bin/drush en {name} - enable module
 
 1. devel
 2. paragraphs
@@ -26,6 +27,7 @@ composer require drush/drush
 8. ds
 9. inline form errors
 10. examples
+11. rest ui
 
 core.extension - установленные модули и темы
 

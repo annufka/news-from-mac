@@ -187,7 +187,6 @@ function bda_hello_node_view(array &$build, \Drupal\Core\Entity\EntityInterface 
       '#type' => 'markup',
       '#markup' => 'Time ' . $diff . '',
     ];
-
     $renderer->addCacheableDependency($build, $config);
   }
 }

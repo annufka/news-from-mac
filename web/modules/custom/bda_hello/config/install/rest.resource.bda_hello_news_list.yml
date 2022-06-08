@@ -1,0 +1,12 @@
+#id: bda_hello_news_list
+#plugin_id: bda_hello_news_list
+#granularity: resource
+#configuration:
+#  methods:
+#    - GET
+#    - POST
+#  formats:
+#    - json
+#  authentication:
+#    - cookie
+#    - basic_auth
