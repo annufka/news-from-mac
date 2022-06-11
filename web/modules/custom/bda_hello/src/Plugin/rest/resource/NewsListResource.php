@@ -110,7 +110,7 @@ class NewsListResource extends ResourceBase {
   /**
    * Responds to POST requests.
    */
-  public function post(Request $request, $data) {
+  public function post(Request $request) {
 
     $node_type = 'news';
     if (!$this->currentUser->hasPermission('access content')) {
@@ -125,11 +125,13 @@ class NewsListResource extends ResourceBase {
     ]);
     $news->enforceIsNew();
     $news->save();
+    $response = new ResourceResponse($news);
+    $response->addCacheableDependency($news);
 
     //    $message = $this->t("New News Created with nids : @message", ['@message' => implode(",", $news)]);
 
     //    return new ResourceResponse($message, 200);
-    return new ResourceResponse($news);
+    return $response;
   }
 
   /**
@@ -160,12 +162,12 @@ class NewsListResource extends ResourceBase {
       switch ($method) {
         case 'GET':
           $route->setPath($canonical_path);
-          $route->addRequirements(array('_format' => 'hal_json'));
+          $route->addRequirements(array('_format' => 'json'));
           $route_name = 'get';
           break;
         case 'POST':
           $route->setPath($create_path);
-          $route->addRequirements(array('_content_type_format' => "application/hal+json;charset=utf-8", "_csrf_request_header_token" => 'FALSE'));
+          $route->addRequirements(array('_content_type_format' => "json", "_csrf_request_header_token" => 'FALSE', '_format' => 'json'));
           $route_name = 'post';
           break;
       }
@@ -196,7 +198,8 @@ class NewsListResource extends ResourceBase {
   protected function getBaseRouteRequirements($method) {
     $requirements = parent::getBaseRouteRequirements($method);
 
-    $requirements['_content_type_format'] = 'application/hal+json;charset=utf-8';
+//    $requirements['_content_type_format'] = 'application/hal+json';
+//    $requirements['_format'] = 'json';
     $requirements['_access'] = 'TRUE';
 
     return $requirements;
