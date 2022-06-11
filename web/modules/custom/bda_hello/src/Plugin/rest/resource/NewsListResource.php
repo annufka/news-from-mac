@@ -14,6 +14,7 @@ use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Route;
 use Drupal\rest\RequestHandler;
+use Drupal\Component\Serialization\Json;
 
 
 /**
@@ -116,10 +117,11 @@ class NewsListResource extends ResourceBase {
     if (!$this->currentUser->hasPermission('access content')) {
       throw new AccessDeniedHttpException();
     }
+    $params = Json::decode($request->getContent());
 
     $news = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $node_type,
-      'title' => 'news_title',
-      'field_news_description' => 'news_text',
+      'title' => $params['title'],
+      'field_news_description' => $params['description'],
       'uid' => \Drupal::currentUser()->id(),
       'status' => 0
     ]);
