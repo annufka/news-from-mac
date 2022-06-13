@@ -85,12 +85,18 @@ class NewsListResource extends ResourceBase {
    * Responds to GET requests.
    */
   public function get(Request $request, $news_id) {
+    if (!$this->currentUser->hasPermission('access content')) {
+      throw new AccessDeniedHttpException();
+    }
+
     $news = \Drupal::entityTypeManager()->getStorage("node")->load($news_id);
     if ($news && $news->bundle() == 'news') {
       $cache = new CacheableMetadata();
       $response = new ResourceResponse($news);
       $response->addCacheableDependency($news);
       return $response;
+    } else {
+      return new ResourceResponse('News with provided ID is not found.', 404);
     }
   }
 
@@ -102,25 +108,36 @@ class NewsListResource extends ResourceBase {
     if (!$this->currentUser->hasPermission('access content')) {
       throw new AccessDeniedHttpException();
     }
-    $params = Json::decode($request->getContent());
+    try {
+      $params = Json::decode($request->getContent());
+    } catch (\Exception $e) {
+      return new ResourceResponse('You don`t send any data.', 400);
+    }
+    try{
+      $news = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => "news",
+        'title' => $params['title'],
+        'field_news_description' => $params['description'],
+        'uid' => \Drupal::currentUser()->id(),
+        'status' => 0
+      ]);
+      $news->enforceIsNew();
+      $news->save();
 
-    $news = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => "news",
-      'title' => $params['title'],
-      'field_news_description' => $params['description'],
-      'uid' => \Drupal::currentUser()->id(),
-      'status' => 0
-    ]);
-    $news->enforceIsNew();
-    $news->save();
-
-    $response['message'] = 'News created';
-    return new ResourceResponse($response, 200);
+      $response['message'] = 'News created';
+      return new ResourceResponse($response, 200);
+    } catch (\Exception $e) {
+      return new ResourceResponse('Something went wrong during entity creation. Check your data.', 400);
+    }
   }
 
   /**
    * Responds to PATCH requests.
    */
   public function patch(Request $request, $news_id) {
+    if (!$this->currentUser->hasPermission('access content')) {
+      throw new AccessDeniedHttpException();
+    }
+
     $params = Json::decode($request->getContent());
 
     $news = \Drupal::entityTypeManager()->getStorage("node")->load($news_id);
@@ -131,6 +148,8 @@ class NewsListResource extends ResourceBase {
       $response = new ResourceResponse($news);
       $response->addCacheableDependency($news);
       return $response;
+    } else {
+      return new ResourceResponse('News with provided ID is not found.', 404);
     }
   }
 
@@ -138,11 +157,18 @@ class NewsListResource extends ResourceBase {
    * Responds to DELETE requests.
    */
   public function delete(Request $request, $news_id) {
-    $news = \Drupal::entityTypeManager()->getStorage('node')->load($news_id);
-    $news->delete();
+    if (!$this->currentUser->hasPermission('access content')) {
+      throw new AccessDeniedHttpException();
+    }
+    try{
+      $news = \Drupal::entityTypeManager()->getStorage('node')->load($news_id);
+      $news->delete();
 
-    $response['message'] = 'News deleted';
-    return new ResourceResponse($response, 200);
+      $response['message'] = 'News deleted';
+      return new ResourceResponse($response, 200);
+    } catch (\Exception $e) {
+      return new ResourceResponse('Something went wrong during entity deleting. Check your data.', 400);
+    }
   }
 
   /**
