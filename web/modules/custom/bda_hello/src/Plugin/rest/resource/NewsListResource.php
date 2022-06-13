@@ -24,7 +24,7 @@ use Drupal\Component\Serialization\Json;
  *   id = "bda_hello_news_list",
  *   label = @Translation("News List"),
  *   uri_paths = {
- *     "canonical" = "/api/news",
+ *     "canonical" = "/api/news/{news_id}",
  *     "create" = "/api/news"
  *   }
  * )
@@ -84,28 +84,14 @@ class NewsListResource extends ResourceBase {
   /**
    * Responds to GET requests.
    */
-  public function get(Request $request) {
-    $storage = \Drupal::entityTypeManager()->getStorage('node');
-    $ids = $storage->getQuery()
-      ->condition('type', 'news')
-      ->execute();
-    $data = [];
-    $cache = new CacheableMetadata();
-    if (!empty($ids)) {
-      foreach ($storage->loadMultiple($ids) as $news) {
-        $cache->addCacheableDependency($news);
-        $url = $news->toUrl()->toString(TRUE);
-        $cache->addCacheableDependency($url);
-        $data[] = [
-          'title' => $news->label(),
-          'create_date' => date('Y-m-d H:i:s', $news->created->value),
-          'url' => $url->getGeneratedUrl(),
-        ];
-      }
+  public function get(Request $request, $news_id) {
+    $news = \Drupal::entityTypeManager()->getStorage("node")->load($news_id);
+    if ($news && $news->bundle() == 'news') {
+      $cache = new CacheableMetadata();
+      $response = new ResourceResponse($news);
+      $response->addCacheableDependency($news);
+      return $response;
     }
-    $response = new ResourceResponse($data);
-    $response->addCacheableDependency($cache);
-    return $response;
   }
 
   /**
@@ -113,13 +99,12 @@ class NewsListResource extends ResourceBase {
    */
   public function post(Request $request) {
 
-    $node_type = 'news';
     if (!$this->currentUser->hasPermission('access content')) {
       throw new AccessDeniedHttpException();
     }
     $params = Json::decode($request->getContent());
 
-    $news = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => $node_type,
+    $news = \Drupal::entityTypeManager()->getStorage('node')->create(['type' => "news",
       'title' => $params['title'],
       'field_news_description' => $params['description'],
       'uid' => \Drupal::currentUser()->id(),
@@ -127,13 +112,37 @@ class NewsListResource extends ResourceBase {
     ]);
     $news->enforceIsNew();
     $news->save();
-    $response = new ResourceResponse($news);
-    $response->addCacheableDependency($news);
 
-    //    $message = $this->t("New News Created with nids : @message", ['@message' => implode(",", $news)]);
+    $response['message'] = 'News created';
+    return new ResourceResponse($response, 200);
+  }
 
-    //    return new ResourceResponse($message, 200);
-    return $response;
+  /**
+   * Responds to PATCH requests.
+   */
+  public function patch(Request $request, $news_id) {
+    $params = Json::decode($request->getContent());
+
+    $news = \Drupal::entityTypeManager()->getStorage("node")->load($news_id);
+    if ($news && $news->bundle() == 'news') {
+      $news->get('title')->value = $params['title'];
+      $news->get('field_news_description')->value = $params['description'];
+      $news->save();
+      $response = new ResourceResponse($news);
+      $response->addCacheableDependency($news);
+      return $response;
+    }
+  }
+
+  /**
+   * Responds to DELETE requests.
+   */
+  public function delete(Request $request, $news_id) {
+    $news = \Drupal::entityTypeManager()->getStorage('node')->load($news_id);
+    $news->delete();
+
+    $response['message'] = 'News deleted';
+    return new ResourceResponse($response, 200);
   }
 
   /**
@@ -152,7 +161,7 @@ class NewsListResource extends ResourceBase {
     $collection = new RouteCollection();
 
     $definition = $this->getPluginDefinition();
-    $canonical_path = $definition['uri_paths']['canonical'] ?? '/' . strtr($this->pluginId, ':', '/') . '/{id}';
+    $canonical_path = $definition['uri_paths']['canonical'] ?? '/' . strtr($this->pluginId, ':', '/') . '/{news_id}';
     $create_path = $definition['uri_paths']['create'] ?? '/' . strtr($this->pluginId, ':', '/');
 
     $route_name = strtr($this->pluginId, ':', '.');
@@ -172,6 +181,11 @@ class NewsListResource extends ResourceBase {
           $route->addRequirements(array('_content_type_format' => "json", "_csrf_request_header_token" => 'FALSE', '_format' => 'json'));
           $route_name = 'post';
           break;
+        case 'PATCH' || 'DELETE':
+          $route->setPath($canonical_path);
+          $route->addRequirements(array('_content_type_format' => "json", "_csrf_request_header_token" => 'FALSE', '_format' => 'json'));
+          $route_name = "patch";
+          break;
       }
       $collection->add("$route_name.$method", $route);
     }
@@ -184,7 +198,7 @@ class NewsListResource extends ResourceBase {
    */
   public function availableMethods() {
     $methods = $this->requestMethods();
-    $available = ["GET", "POST"];
+    $available = ["GET", "POST", "PATCH", "DELETE"];
     foreach ($methods as $method) {
       // Only expose methods where the HTTP request method exists on the plugin.
       if (method_exists($this, strtolower($method))) {

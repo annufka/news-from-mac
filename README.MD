@@ -32,3 +32,4 @@ composer require drush/drush
 core.extension - установленные модули и темы
 
 Double shift - поиск по классам
+Shift+command+F
