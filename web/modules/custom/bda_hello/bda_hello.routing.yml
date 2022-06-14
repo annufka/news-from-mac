@@ -62,4 +62,9 @@ bda_hello.table_of_news:
   requirements:
     _permission: 'access content'
 
-
+example_route_api_latest:
+  path: '/api/example/latest'
+  defaults:
+    _controller: '\Drupal\bda_hello\Controller\Example::latest'
+  requirements:
+    _permission: 'access content'
