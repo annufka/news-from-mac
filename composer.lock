@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9bf90f5e887d6aa5df6de0df138e2699",
+    "content-hash": "ba58a35c729cb6920ab8af93632029d4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2820,6 +2820,59 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/smtp",
                 "issues": "https://www.drupal.org/project/issues/smtp"
+            }
+        },
+        {
+            "name": "drupal/tcpdf",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/tcpdf.git",
+                "reference": "2.0.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/tcpdf-2.0.1.zip",
+                "reference": "2.0.1",
+                "shasum": "f192b0f73a32d201231a119af8952d30440b960b"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9",
+                "tecnickcom/tcpdf": "6.2.11"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "2.0.1",
+                    "datestamp": "1645610893",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Ollibolli",
+                    "homepage": "https://www.drupal.org/user/3245195"
+                },
+                {
+                    "name": "mimrock",
+                    "homepage": "https://www.drupal.org/user/850192"
+                },
+                {
+                    "name": "segi",
+                    "homepage": "https://www.drupal.org/user/1421432"
+                }
+            ],
+            "description": "TCPDF wrapper for Drupal.",
+            "homepage": "https://www.drupal.org/project/tcpdf",
+            "support": {
+                "source": "https://git.drupalcode.org/project/tcpdf"
             }
         },
         {
@@ -7490,6 +7543,72 @@
                 }
             ],
             "time": "2021-11-18T18:49:23+00:00"
+        },
+        {
+            "name": "tecnickcom/tcpdf",
+            "version": "6.2.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tecnickcom/TCPDF.git",
+                "reference": "354433a33946ae7497c3eab291eaaf814bccbfab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/354433a33946ae7497c3eab291eaaf814bccbfab",
+                "reference": "354433a33946ae7497c3eab291eaaf814bccbfab",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "fonts",
+                    "config",
+                    "include",
+                    "tcpdf.php",
+                    "tcpdf_parser.php",
+                    "tcpdf_import.php",
+                    "tcpdf_barcodes_1d.php",
+                    "tcpdf_barcodes_2d.php",
+                    "include/tcpdf_colors.php",
+                    "include/tcpdf_filters.php",
+                    "include/tcpdf_font_data.php",
+                    "include/tcpdf_fonts.php",
+                    "include/tcpdf_images.php",
+                    "include/tcpdf_static.php",
+                    "include/barcodes/datamatrix.php",
+                    "include/barcodes/pdf417.php",
+                    "include/barcodes/qrcode.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPLv3"
+            ],
+            "authors": [
+                {
+                    "name": "Nicola Asuni",
+                    "email": "info@tecnick.com",
+                    "homepage": "http://nicolaasuni.tecnick.com"
+                }
+            ],
+            "description": "TCPDF is a PHP class for generating PDF documents and barcodes.",
+            "homepage": "http://www.tcpdf.org/",
+            "keywords": [
+                "PDFD32000-2008",
+                "TCPDF",
+                "barcodes",
+                "datamatrix",
+                "pdf",
+                "pdf417",
+                "qrcode"
+            ],
+            "support": {
+                "source": "https://github.com/tecnickcom/TCPDF/tree/6.2.11"
+            },
+            "time": "2015-08-02T12:30:27+00:00"
         },
         {
             "name": "twig/twig",

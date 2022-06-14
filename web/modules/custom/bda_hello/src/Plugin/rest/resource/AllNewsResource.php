@@ -84,6 +84,10 @@ class AllNewsResource extends ResourceBase {
    * Responds to GET requests.
    */
   public function get(Request $request) {
+    if (!$this->currentUser->hasPermission('access content')) {
+      throw new AccessDeniedHttpException();
+    }
+
         $storage = \Drupal::entityTypeManager()->getStorage('node');
         $ids = $storage->getQuery()
           ->condition('type', 'news')
