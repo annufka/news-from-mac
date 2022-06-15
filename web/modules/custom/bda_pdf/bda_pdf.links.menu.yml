@@ -1,0 +1,6 @@
+bda_pdf.settings_form:
+  title: 'bda_pdf'
+  description: 'Configure bda_pdf.'
+  parent: system.admin_config_system
+  route_name: bda_pdf.settings_form
+  weight: 10

@@ -1,0 +1,31 @@
+bda_pdf.example:
+  path: '/bda-pdf/example'
+  defaults:
+    _title: 'Example'
+    _controller: '\Drupal\bda_pdf\Controller\BdaPdfController::build'
+  requirements:
+    _permission: 'access content'
+
+bda_pdf.settings_form:
+  path: '/admin/config/system/bda-pdf'
+  defaults:
+    _title: 'bda_pdf settings'
+    _form: 'Drupal\bda_pdf\Form\SettingsForm'
+  requirements:
+    _permission: 'administer bda_pdf configuration'
+
+bda_pdf.download_pdf:
+  path: '/pdf/download/{name}'
+  defaults:
+    _controller: 'Drupal\bda_pdf\Controller\BDAPdfController::downloadPdf'
+    _title: 'Download PDF'
+  requirements:
+    _permission: 'access content'
+
+bda_pdf.content:
+  path: '/pdf/content'
+  defaults:
+    _controller: 'Drupal\bda_pdf\Controller\BDAPdfController::contents'
+    _title: 'PDF page'
+  requirements:
+    _permission: 'access content'
